@@ -22,8 +22,6 @@
 #include <pcl/registration/warp_point_rigid_3d.h>
 #include <pcl/gpu/features/features.hpp>
 #include <pcl/gpu/containers/device_array.hpp>
-#include <pcl/cuda/sample_consensus/sac_model.h>
-
 void print4x4Matrix (const Eigen::Matrix4d & matrix)
 {
     printf ("Rotation matrix :\n");
@@ -175,17 +173,17 @@ auto execute_global_registration(
 
 
     const float distance_threshold = voxel_size * 2.5;
-    boost::shared_ptr<pcl::registration::WarpPointRigid3D<pcl::PointXYZ, pcl::PointXYZ> >  warp_fcn(new pcl::registration::WarpPointRigid3D<pcl::PointXYZ, pcl::PointXYZ>);
-    warp_fcn->setParam(p);
-    boost::shared_ptr<pcl::registration::TransformationEstimationLM<pcl::PointXYZ, pcl::PointXYZ> > te (new pcl::registration::TransformationEstimationLM<pcl::PointXYZ, pcl::PointXYZ>);
-    te->setWarpFunction (warp_fcn);
+    //boost::shared_ptr<pcl::registration::WarpPointRigid3D<pcl::PointXYZ, pcl::PointXYZ> >  warp_fcn(new pcl::registration::WarpPointRigid3D<pcl::PointXYZ, pcl::PointXYZ>);
+    //warp_fcn->setParam(p);
+    //boost::shared_ptr<pcl::registration::TransformationEstimationLM<pcl::PointXYZ, pcl::PointXYZ> > te (new pcl::registration::TransformationEstimationLM<pcl::PointXYZ, pcl::PointXYZ>);
+    //te->setWarpFunction (warp_fcn);
     const pcl::PointCloud<pcl::PointXYZ>::Ptr output(new pcl::PointCloud<pcl::PointXYZ>);
     const pcl::SampleConsensusPrerejective<pcl::PointXYZ, pcl::PointXYZ, pcl::FPFHSignature33>::Ptr align(new pcl::SampleConsensusPrerejective<pcl::PointXYZ, pcl::PointXYZ, pcl::FPFHSignature33>);
     align->setInputSource(kp1);
     align->setSourceFeatures(fpfh1);
     align->setInputTarget(kp2);
     align->setTargetFeatures(fpfh2);
-    align->setTransformationEstimation(te);
+    //align->setTransformationEstimation(te);
     //align->setMaximumIterations(300000);
     align->setMaximumIterations(100000);
     align->setNumberOfSamples(4);
@@ -207,9 +205,9 @@ Eigen::Matrix4f refine_registration(
         const float voxel_size)
 {
 
-    boost::shared_ptr<pcl::registration::WarpPointRigid3D<pcl::PointXYZRGBNormal, pcl::PointXYZRGBNormal> >  warp_fcn(new pcl::registration::WarpPointRigid3D<pcl::PointXYZRGBNormal, pcl::PointXYZRGBNormal>);
-    boost::shared_ptr<pcl::registration::TransformationEstimationLM<pcl::PointXYZRGBNormal, pcl::PointXYZRGBNormal> > te (new pcl::registration::TransformationEstimationLM<pcl::PointXYZRGBNormal, pcl::PointXYZRGBNormal>);
-    te->setWarpFunction (warp_fcn);
+    //boost::shared_ptr<pcl::registration::WarpPointRigid3D<pcl::PointXYZRGBNormal, pcl::PointXYZRGBNormal> >  warp_fcn(new pcl::registration::WarpPointRigid3D<pcl::PointXYZRGBNormal, pcl::PointXYZRGBNormal>);
+    //boost::shared_ptr<pcl::registration::TransformationEstimationLM<pcl::PointXYZRGBNormal, pcl::PointXYZRGBNormal> > te (new pcl::registration::TransformationEstimationLM<pcl::PointXYZRGBNormal, pcl::PointXYZRGBNormal>);
+    //te->setWarpFunction (warp_fcn);
     const auto scene1_temp = scene1->makeShared();
     pcl::transformPointCloud(*scene1_temp, *scene1_temp, trans);
     Eigen::Matrix4f ts= Eigen::Matrix4f::Identity();
